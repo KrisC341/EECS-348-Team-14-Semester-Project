@@ -113,17 +113,16 @@ class Lexer{
 };
 
 int main() {
-    string user_str = "(9+g8/  6)";
+    string user_str = "(9 -843/g  6)";
     Lexer test(user_str);
 
     //get the first token
     Token token = test.GetToken();
 
     //Loop through the string and get tokens
-    while (token.TokenType != End || token.TokenType != Invalid) {
+    while (token.TokenType != End && token.TokenType != Invalid) {
         // Exit out if the token is invalid
         if (token.TokenType == Invalid) {
-            cout << "Error: Invalid token '" << token.value;
             break;
         }
         cout << "Token Value: " << token.value << endl;  //Print the valid token
