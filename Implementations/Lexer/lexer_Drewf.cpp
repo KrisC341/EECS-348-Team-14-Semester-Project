@@ -66,7 +66,10 @@ private:
         {"LPAREN", R"(\()"},    // left parentheses
         {"RPAREN", R"(\))"},    // right parentheses
         {"EXPONENT", R"(\*\*)"},    // exponentiation operator
-        {"OPERATOR", R"([+\-*/])"}, // arithmetic operators
+        {"PLUS", R"(\+)"},  // plus operator
+        {"MINUS", R"(\-)"}, // minus operator
+        {"MULTIPLY", R"(\*)"},  // multiply operator
+        {"DIVIDE", R"(/)"}, // divide operator
     };
 };
 
