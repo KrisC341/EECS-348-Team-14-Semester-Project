@@ -15,7 +15,8 @@ enum TokenID{
     Mod,
     Plus,
     Minus,
-    Invalid
+    Invalid,
+    End
 };
 
 //Create the token struct with an ID and a value
@@ -37,7 +38,7 @@ class Lexer{
     Token GetToken(){
         //Return an error if the current position is greater than the size
         if (cur_pos >= size){
-            return {Invalid, "---Went Past Size Limit---"};
+            return {End, "---Went Past Size Limit---"};
         }
 
 
@@ -46,6 +47,9 @@ class Lexer{
         //Ignore spaces
         while(isspace(cur_token)){
             cur_pos++;
+            if (cur_pos < size) {
+                cur_token = input[cur_pos];  // Check the next space for the token
+            }
         }
 
         //Returns the token as an exponent only if the current and next position are '*'
@@ -108,14 +112,23 @@ class Lexer{
 
 };
 
-
-
-
-int main()
-{
-    string user_str = "(9+ 8/6)";
+int main() {
+    string user_str = "(9+g8/  6)";
     Lexer test(user_str);
-    for (int pos = 0; pos < user_str.size(); pos++){
-    test.GetToken();}
 
+    //get the first token
+    Token token = test.GetToken();
+
+    //Loop through the string and get tokens
+    while (token.TokenType != End || token.TokenType != Invalid) {
+        // Exit out if the token is invalid
+        if (token.TokenType == Invalid) {
+            cout << "Error: Invalid token '" << token.value;
+            break;
+        }
+        cout << "Token Value: " << token.value << endl;  //Print the valid token
+        token = test.GetToken();  //Get next token
+    }
+
+    return 0;
 }
