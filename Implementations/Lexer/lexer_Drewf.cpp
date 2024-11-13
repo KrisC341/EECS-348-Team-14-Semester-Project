@@ -70,6 +70,7 @@ private:
         {"MINUS", R"(\-)"}, // minus operator
         {"MULTIPLY", R"(\*)"},  // multiply operator
         {"DIVIDE", R"(/)"}, // divide operator
+        {"MOD", R"(\%)"},    // mod operator
     };
 };
 
