@@ -31,7 +31,7 @@ public:
     }
 
     //Return integer value (leaf node)
-    int getValue() {
+    int getValue() override {
         return value;
     }
 
@@ -62,7 +62,7 @@ public:
 
     //Recursively getValue left and right subtrees
     //Add the results and return it
-    int getValue() {
+    int getValue() override {
         return left -> getValue() + right -> getValue();
     }
 
@@ -148,3 +148,74 @@ public:
     }
 };
 
+class Exponent : public treeNode {
+private:
+    treeNode* base;
+    treeNode* exponent;
+
+public:
+
+    //'Add' constructor with parameters for left and right subtrees
+    Exponent(treeNode* b, treeNode* e) {
+        base = b;
+        exponent  = e;
+    }
+    
+    ~Exponent() {
+        delete base;
+        delete exponent;
+    }
+
+    int getValue() override {
+        int baseValue = base->getValue();
+        int exponentValue = exponent->getValue();
+
+        // Handling negative exponents, if unsupported
+        if (exponentValue < 0) {
+            cout << "Error: Negative exponents not supported for integers." << endl;
+            return 0; 
+        }
+
+        int result = 1;
+
+        // Loop through and multiply the base value 'exponentValue' number of time
+        for (int i = 0; i < exponentValue; ++i) {
+            result *= baseValue;
+        }
+
+        return result;
+
+        }
+
+};
+
+class Modulo : public treeNode {
+private:
+    treeNode* left;
+    treeNode* right;
+
+public:
+    Modulo(treeNode* l, treeNode* r) {
+        left = l;
+        right = r;
+    }
+
+    ~Modulo() {
+        delete left;
+        delete right;
+    }
+
+    int getValue() override {
+        int divisor = right->getValue();
+
+        // Handle invalid mod zero
+        if (divisor == 0) {
+            cout << "Error: Modulo by zero." << endl;
+            return 0;
+        }
+        return left->getValue() % divisor;
+
+    }
+
+
+};
