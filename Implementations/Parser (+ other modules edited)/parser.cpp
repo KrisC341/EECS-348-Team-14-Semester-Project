@@ -21,15 +21,25 @@ treeNode* parseE(const string& input, size_t& pos) {
                     //the token is addition if it matches conditions above
                     prevToken = nextToken;
                     nextToken = scanToken(input, pos);
-                    treeNode* b = parseT(input, pos);
-                    a = new Add(a, b);
+                    if ((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN)) {
+                        treeNode* b = parseT(input, pos);
+                        a = new Add(a, b);
+                    }
+                    else {
+                        throw std::runtime_error("Operator with no operand.");
+                    }
                 }
                 else {
                     //the token is positive unary if it doesn't match the conditions above
                     prevToken = nextToken;
                     nextToken = scanToken(input, pos);
-                    treeNode* b = parseF(input, pos);
-                    a = new Plus(b);
+                    if((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN)) {
+                        treeNode* b = parseF(input, pos);
+                        a = new Plus(b);
+                    }
+                    else {
+                        throw std::runtime_error("Operator with no operand.");
+                    }
                 }
             }
             else if (::nextToken.type == TokenType::TOKEN_MINUS) { //might cause problems with negation but we'll get to it later
@@ -37,15 +47,25 @@ treeNode* parseE(const string& input, size_t& pos) {
                     //the token is subtraction if it matches conditions above
                     prevToken = nextToken;
                     nextToken = scanToken(input, pos);
-                    treeNode* b = parseT(input, pos);
-                    a = new Sub(a, b);
+                    if ((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN)) {
+                        treeNode* b = parseT(input, pos);
+                        a = new Sub(a, b);
+                    }
+                    else {
+                        throw std::runtime_error("Operator with no operand.");
+                    }
                 }
                 else {
                     //the token is negative unary if it doesn't match conditions above
                     prevToken = nextToken;
                     nextToken = scanToken(input, pos);
-                    treeNode* b = parseF(input, pos);
-                    a = new Negate(b);
+                    if ((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN)) {
+                        treeNode* b = parseF(input, pos);
+                        a = new Negate(b);
+                    }
+                    else {
+                        throw std::runtime_error("Operator with no operand.");
+                    }
                 }
             }
             else {
@@ -60,22 +80,53 @@ treeNode* parseT(const string& input, size_t& pos) {
     treeNode* a = parseP(input, pos);
     while (true) {
         if (::nextToken.type == TokenType::TOKEN_STAR) {
-            prevToken = nextToken;
-            nextToken = scanToken(input, pos);
-            treeNode* b = parseP(input, pos);
-            a = new Multi(a, b);
+            if ((::prevToken.type == TokenType::TOKEN_NUMBER) || (::prevToken.type == TokenType::TOKEN_RPAREN)) {
+                prevToken = nextToken;
+                nextToken = scanToken(input, pos);
+                if ((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN) || (::nextToken.type == TokenType::TOKEN_PLUS) || (::nextToken.type == TokenType::TOKEN_MINUS)) {
+                    treeNode* b = parseP(input, pos);
+                    a = new Multi(a, b);
+                }
+                else {
+                    throw std::runtime_error("Operator with no operand.");
+                }
+
+            }
+            else {
+                throw std::runtime_error("Operator with no operand.");
+            }
         }
         else if (::nextToken.type == TokenType::TOKEN_SLASH) {
-            prevToken = nextToken;
-            nextToken = scanToken(input, pos);
-            treeNode* b = parseP(input, pos);
-            a = new Div(a, b);
+            if ((::prevToken.type == TokenType::TOKEN_NUMBER) || (::prevToken.type == TokenType::TOKEN_RPAREN)) {
+                prevToken = nextToken;
+                nextToken = scanToken(input, pos);
+                if ((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN) || (::nextToken.type == TokenType::TOKEN_PLUS) || (::nextToken.type == TokenType::TOKEN_MINUS)) {
+                    treeNode* b = parseP(input, pos);
+                    a = new Div(a, b);
+                }
+                else {
+                    throw std::runtime_error("Operator with no operand.");
+                }
+            }
+            else {
+                throw std::runtime_error("Operator with no operand.");
+            }
         }
         else if (::nextToken.type == TokenType::TOKEN_MODULO) {
-            prevToken = nextToken;
-            nextToken = scanToken(input, pos);
-            treeNode* b = parseP(input, pos);
-            a = new Mod(a, b);
+            if ((::prevToken.type == TokenType::TOKEN_NUMBER) || (::prevToken.type == TokenType::TOKEN_RPAREN)) {
+                prevToken = nextToken;
+                nextToken = scanToken(input, pos);
+                if ((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN) || (::nextToken.type == TokenType::TOKEN_PLUS) || (::nextToken.type == TokenType::TOKEN_MINUS)) {
+                    treeNode* b = parseP(input, pos);
+                    a = new Mod(a, b);
+                }
+                else {
+                    throw std::runtime_error("Operator with no operand.");
+                }
+            }
+            else {
+                throw std::runtime_error("Operator with no operand.");
+            }
         }
         else {
             return a;
@@ -90,10 +141,20 @@ treeNode* parseP(const string& input, size_t& pos) {
     treeNode* a = parseF(input, pos);
     while (true) {
         if (::nextToken.type == TokenType::TOKEN_EXPONENT) {  
-            prevToken = nextToken;
-            nextToken = scanToken(input, pos);
-            treeNode* b = parseF(input, pos);  
-            a = new Expo(a, b);  
+            if ((::prevToken.type == TokenType::TOKEN_NUMBER) || (::prevToken.type == TokenType::TOKEN_RPAREN)) {
+                prevToken = nextToken;
+                nextToken = scanToken(input, pos);
+                if ((::nextToken.type == TokenType::TOKEN_NUMBER) || (::nextToken.type == TokenType::TOKEN_LPAREN) || (::nextToken.type == TokenType::TOKEN_PLUS) || (::nextToken.type == TokenType::TOKEN_MINUS)) {
+                    treeNode* b = parseF(input, pos);
+                    a = new Expo(a, b);
+                }
+                else {
+                    throw std::runtime_error("Operator with no operand.");
+                }
+            }
+            else {
+                throw std::runtime_error("Operator with no operand.");
+            }
         }
         else {
             return a;
@@ -120,6 +181,12 @@ treeNode* parseF(const string& input, size_t& pos) {
                     nextToken = scanToken(input, pos);
                     return new Negate(b);
                 }
+                else {
+                    throw std::runtime_error("Parentheses are mismatched or missing. Line 185");
+                }
+            }
+            else {
+                throw std::runtime_error("Operator with no operand.");
             }
         }
         else if (::nextToken.type == TokenType::TOKEN_PLUS) {
@@ -138,26 +205,53 @@ treeNode* parseF(const string& input, size_t& pos) {
                     nextToken = scanToken(input, pos);
                     return new Plus(b);
                 }
+                else {
+                    throw std::runtime_error("Parentheses are mismatched or missing. line 206");
+                }
             }
         }
         else if (::nextToken.type == TokenType::TOKEN_NUMBER) {
-            float num = std::stof(::nextToken.value);
-            treeNode* a = new Integer(num);
-            prevToken = nextToken;
-            nextToken = scanToken(input, pos);
-            return a;
-        }
-        else if (::nextToken.type == TokenType::TOKEN_LPAREN) {
-            prevToken = nextToken;
-            nextToken = scanToken(input, pos);
-            treeNode* a = parseE(input, pos);
-            if (a == NULL) { return NULL; }
-            if (::nextToken.type == TokenType::TOKEN_RPAREN) {
+            if ((::prevToken.type == TokenType::TOKEN_PLUS) || (::prevToken.type == TokenType::TOKEN_MINUS) || (::prevToken.type == TokenType::TOKEN_STAR) || (::prevToken.type == TokenType::TOKEN_SLASH) || (::prevToken.type == TokenType::TOKEN_MODULO) || (::prevToken.type == TokenType::TOKEN_EXPONENT) || (::prevToken.type == TokenType::TOKEN_LPAREN) || (::prevToken.type == TokenType::TOKEN_START)) {
+                float num = std::stof(::nextToken.value);
+                treeNode* a = new Integer(num);
                 prevToken = nextToken;
                 nextToken = scanToken(input, pos);
-                return a;
+                if ((::nextToken.type == TokenType::TOKEN_PLUS) || (::nextToken.type == TokenType::TOKEN_MINUS) || (::nextToken.type == TokenType::TOKEN_STAR) || (::nextToken.type == TokenType::TOKEN_SLASH) || (::nextToken.type == TokenType::TOKEN_MODULO) || (::nextToken.type == TokenType::TOKEN_EXPONENT) || (::nextToken.type == TokenType::TOKEN_RPAREN) || (::nextToken.type == TokenType::TOKEN_END)) {
+                    return a;
+                }
+                else {
+                    throw std::runtime_error("Operand missing operator.");
+                }
             }
-            else { return NULL; break; }
+            else {
+                throw std::runtime_error("Operand missing operator.");
+            }
+            
+        }
+        else if (::nextToken.type == TokenType::TOKEN_LPAREN) {
+            if ((::prevToken.type == TokenType::TOKEN_PLUS) || (::prevToken.type == TokenType::TOKEN_MINUS) || (::prevToken.type == TokenType::TOKEN_STAR) || (::prevToken.type == TokenType::TOKEN_SLASH) || (::prevToken.type == TokenType::TOKEN_MODULO) || (::prevToken.type == TokenType::TOKEN_EXPONENT) || (::prevToken.type == TokenType::TOKEN_LPAREN) || (::prevToken.type == TokenType::TOKEN_START)){
+                prevToken = nextToken;
+                nextToken = scanToken(input, pos);
+                treeNode* a = parseE(input, pos);
+                if (a == NULL) { return NULL; }
+                if (::nextToken.type == TokenType::TOKEN_RPAREN) {
+                    prevToken = nextToken;
+                    nextToken = scanToken(input, pos);
+                    return a;
+                }
+                else {
+                    throw std::runtime_error("Parentheses are mismatched or missing. line 240");
+                }
+            }
+            else {
+                throw std::runtime_error("Operand missing operator (parentheses)");
+            }
+        }
+        else if(::nextToken.type == TokenType::TOKEN_END){
+            return NULL;
+        }
+        else if (::nextToken.type == TokenType::TOKEN_RPAREN) { //a parenthese was hit without an accompanything left paren
+            throw std::runtime_error("Parentheses are mismatched or missing. line 251");
         }
         else {
             return NULL;
@@ -169,11 +263,16 @@ treeNode* parseF(const string& input, size_t& pos) {
 //driver main, for testing while coding
 int main() {
     size_t pos = 0;
-    string input = "+(-2) * (-3) - ((-4) / (+5))";
+    string input = "((7 * 3) ^ 2)";
     //-(+2) * (+3) - (-4) / (-5)
-    nextToken = scanToken(input, pos);
-    prevToken.type = TokenType::TOKEN_START; //sets previous token as start, to avoid recursive issues
-    treeNode* resultTree = parseE(input, pos);
+    try {
+        nextToken = scanToken(input, pos);
+        prevToken.type = TokenType::TOKEN_START; //sets previous token as start, to avoid recursive issues
+        treeNode* resultTree = parseE(input, pos);
 
-    std::cout << resultTree->getValue() << std::endl;
+        std::cout << resultTree->getValue() << std::endl;
+    }
+    catch (const std::exception& e) {
+        cout << "Error: " << e.what() << std::endl;
+    }
 }

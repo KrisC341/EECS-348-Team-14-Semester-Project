@@ -77,8 +77,7 @@ Div::~Div() {
 float Div::getValue() {
     float divisor = right->getValue();
     if (divisor == 0) {
-        cout << "Error: Division by zero." << endl;
-        return 0;
+        throw std::runtime_error("Division by zero.");
     }
     return left->getValue() / divisor;
 }

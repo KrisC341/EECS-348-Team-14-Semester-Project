@@ -83,6 +83,7 @@ Token scanToken(const string &input, size_t &pos) {
             pos++;
             result.type = TOKEN_INVALID;
             result.value = "ERROR";
+            throw std::runtime_error("Unknown characters");
             return result;
     }
 
