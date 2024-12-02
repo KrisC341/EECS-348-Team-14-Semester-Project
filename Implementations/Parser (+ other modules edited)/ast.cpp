@@ -93,7 +93,11 @@ Mod::~Mod() {
 
 // Mod class getValue method
 float Mod::getValue() {
-    return static_cast<int>(left->getValue()) % static_cast<int>(right->getValue());
+    int divisor = static_cast<int>(right->getValue());
+    if (divisor == 0) {
+        throw std::runtime_error("Division by zero.");
+    }
+    return static_cast<int>(left->getValue()) % divisor;
 }
 
 // Plus class constructor
