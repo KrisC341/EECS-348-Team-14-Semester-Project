@@ -95,7 +95,7 @@ Mod::~Mod() {
 float Mod::getValue() {
     int divisor = static_cast<int>(right->getValue());
     if (divisor == 0) {
-        throw std::runtime_error("Division by zero.");
+        throw std::runtime_error("Modulo by zero.");
     }
     return static_cast<int>(left->getValue()) % divisor;
 }
