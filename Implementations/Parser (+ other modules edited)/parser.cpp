@@ -175,6 +175,9 @@ treeNode* parseF(const string& input, size_t& pos) {
             else if (::nextToken.type == TokenType::TOKEN_LPAREN) {
                 prevToken = nextToken;
                 nextToken = scanToken(input, pos);
+                if (::nextToken.type == TokenType::TOKEN_RPAREN) { //if statement = true, this means there is no expression in the parentheses, meaning no argument
+                    throw std::runtime_error("No argument.");
+                }
                 treeNode* b = parseE(input, pos);
                 if (::nextToken.type == TokenType::TOKEN_RPAREN) {
                     prevToken = nextToken;
@@ -199,6 +202,9 @@ treeNode* parseF(const string& input, size_t& pos) {
             else if (::nextToken.type == TokenType::TOKEN_LPAREN) {
                 prevToken = nextToken;
                 nextToken = scanToken(input, pos);
+                if (::nextToken.type == TokenType::TOKEN_RPAREN) { //if statement = true, this means there is no expression in the parentheses, meaning no argument
+                    throw std::runtime_error("No argument.");
+                }
                 treeNode* b = parseE(input, pos);
                 if (::nextToken.type == TokenType::TOKEN_RPAREN) {
                     prevToken = nextToken;
@@ -232,6 +238,9 @@ treeNode* parseF(const string& input, size_t& pos) {
             if ((::prevToken.type == TokenType::TOKEN_PLUS) || (::prevToken.type == TokenType::TOKEN_MINUS) || (::prevToken.type == TokenType::TOKEN_STAR) || (::prevToken.type == TokenType::TOKEN_SLASH) || (::prevToken.type == TokenType::TOKEN_MODULO) || (::prevToken.type == TokenType::TOKEN_EXPONENT) || (::prevToken.type == TokenType::TOKEN_LPAREN) || (::prevToken.type == TokenType::TOKEN_START)){
                 prevToken = nextToken;
                 nextToken = scanToken(input, pos);
+                if (::nextToken.type == TokenType::TOKEN_RPAREN) { //if statement = true, this means there is no expression in the parentheses, meaning no argument
+                    throw std::runtime_error("No argument.");
+                }
                 treeNode* a = parseE(input, pos);
                 if (a == NULL) { return NULL; }
                 if (::nextToken.type == TokenType::TOKEN_RPAREN) {
@@ -263,9 +272,11 @@ treeNode* parseF(const string& input, size_t& pos) {
 //driver main, for testing while coding
 int main() {
     size_t pos = 0;
-    string input = "((7 * 3) ^ 2)";
-    //-(+2) * (+3) - (-4) / (-5)
+    string input = "(2))))))))";
     try {
+        if (input.empty()) {
+            throw std::runtime_error("No argument.");
+        }
         nextToken = scanToken(input, pos);
         prevToken.type = TokenType::TOKEN_START; //sets previous token as start, to avoid recursive issues
         treeNode* resultTree = parseE(input, pos);

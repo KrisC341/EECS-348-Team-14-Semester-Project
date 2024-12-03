@@ -8,8 +8,9 @@ using std::string;
 // Sets nextToken to next token from input
 Token scanToken(const string &input, size_t &pos) {
     Token result;
-    std::cout << "Pos: " << pos << std::endl;
-    std::cout << "Char: " << input[pos] << std::endl;
+    //std::cout << "Pos: " << pos << std::endl;
+    //std::cout << "Char: " << input[pos] << std::endl;
+    //the above two comments were used for debugging
     // Whitespace skipper
     while (pos < input.size() && std::isspace(input[pos])) {
         pos++;
