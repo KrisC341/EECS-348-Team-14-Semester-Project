@@ -269,21 +269,32 @@ treeNode* parseF(const string& input, size_t& pos) {
 }
 
 
-//driver main, for testing while coding
 int main() {
-    size_t pos = 0;
-    string input = "(2))))))))";
     try {
+        std::cout << "Enter an arithmetic expression: ";
+        std::string input;
+        std::getline(std::cin, input);
+
         if (input.empty()) {
-            throw std::runtime_error("No argument.");
+            throw std::runtime_error("No argument provided. Please enter a valid expression.");
         }
+
+        size_t pos = 0;
         nextToken = scanToken(input, pos);
         prevToken.type = TokenType::TOKEN_START; //sets previous token as start, to avoid recursive issues
+
         treeNode* resultTree = parseE(input, pos);
 
-        std::cout << resultTree->getValue() << std::endl;
+        //output the result
+        if (resultTree != nullptr) {
+            std::cout << "Result: " << resultTree->getValue() << std::endl;
+        } else {
+            throw std::runtime_error("Failed to parse the input expression.");
+        }
     }
     catch (const std::exception& e) {
-        cout << "Error: " << e.what() << std::endl;
+        std::cout << "Error: " << e.what() << std::endl;
     }
+
+    return 0;
 }
