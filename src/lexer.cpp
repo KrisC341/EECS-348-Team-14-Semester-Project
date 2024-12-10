@@ -1,31 +1,17 @@
 #include <iostream>
 #include <string>
 #include <cctype>
+#include "lexer.h"
 
 using std::string;
-
-enum TokenType {
-    TOKEN_NUMBER,
-    TOKEN_PLUS,
-    TOKEN_MINUS,
-    TOKEN_STAR,
-    TOKEN_SLASH,
-    TOKEN_MODULO,
-    TOKEN_EXPONENT,
-    TOKEN_LPAREN,
-    TOKEN_RPAREN,
-    TOKEN_END,
-    TOKEN_INVALID
-};
-
-struct Token {
-    TokenType type;
-    string value;
-};
 
 // Sets nextToken to next token from input
 Token scanToken(const string &input, size_t &pos) {
     Token result;
+    //std::cout << "Pos: " << pos << std::endl;
+    //std::cout << "Char: " << input[pos] << std::endl;
+    //the above two comments were used for debugging
+
     // Whitespace skipper
     while (pos < input.size() && std::isspace(input[pos])) {
         pos++;
@@ -38,33 +24,34 @@ Token scanToken(const string &input, size_t &pos) {
         return result;
     }
 
+    //grabs the current character being tokenized
     char currentChar = input[pos];
 
     // Number lexer
     if (std::isdigit(currentChar)) {
         string num;
-        while (pos < input.size() && std::isdigit(input[pos])) {
-            num += input[pos];
+        while (pos < input.size() && ((std::isdigit(input[pos])) || (currentChar == '.'))) { //checks for decimal and number
+            num += input[pos]; //creates a new digit for the actual number
             pos++;
         }
-        result.type = TOKEN_NUMBER;
+        result.type = TOKEN_NUMBER; //alters token attributes to numerical
         result.value = num;
         return result;
     }
 
     // Operator lexer
     switch (currentChar) {
-        case '+':
+        case '+': //+ operator
             pos++;
             result.type = TOKEN_PLUS;
             result.value = "+";
             return result;
-        case '-':
+        case '-': //- operator
             pos++;
             result.type = TOKEN_MINUS;
             result.value = "-";
             return result;
-        case '*':
+        case '*': //this case detects both * operator and ** operator for exponentiation
             pos++;
             if (pos < input.size() && input[pos] == '*') {
                 pos++;
@@ -75,17 +62,17 @@ Token scanToken(const string &input, size_t &pos) {
                 result.value = "*";
             }
             return result;
-        case '/':
+        case '/': // / operator
             pos++;
             result.type = TOKEN_SLASH;
             result.value = "/";
             return result;
-        case '%':
+        case '%': // modulo operator
             pos++;
             result.type = TOKEN_MODULO;
             result.value = "%";
             return result;
-        case '(':
+        case '(': // both of the following cases are for parenthetical grouping
             pos++;
             result.type = TOKEN_LPAREN;
             result.value = "(";
@@ -95,22 +82,12 @@ Token scanToken(const string &input, size_t &pos) {
             result.type = TOKEN_RPAREN;
             result.value = ")";
             return result;
-        default:
+        default: // this case is reached if the detected character does not match any operator or potential operand, meaning it is an unknown character and should file as an error
             pos++;
             result.type = TOKEN_INVALID;
             result.value = "ERROR";
+            throw std::runtime_error("Unknown characters");
             return result;
     }
-}
 
-int main() {
-    size_t pos = 0;
-    string input = "-(36+5)*2";
-    Token currentToken;
-    do {
-        currentToken = scanToken(input, pos);
-        std::cout << currentToken.value << std::endl;
-    } while (currentToken.type != TOKEN_END);
-
-    return 0;
 }

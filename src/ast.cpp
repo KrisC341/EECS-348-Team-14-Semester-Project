@@ -1,4 +1,5 @@
 #include "ast.h"
+#include <cmath>
 
 // Integer class constructor
 Integer::Integer(float val) : value(val) {}
@@ -76,9 +77,12 @@ Div::~Div() {
 // Div class getValue method
 float Div::getValue() {
     float divisor = right->getValue();
+
+    //error handling for division by zero
     if (divisor == 0) {
         throw std::runtime_error("Division by zero.");
     }
+
     return left->getValue() / divisor;
 }
 
@@ -94,9 +98,12 @@ Mod::~Mod() {
 // Mod class getValue method
 float Mod::getValue() {
     int divisor = static_cast<int>(right->getValue());
+
+    //error handling for modulo by zero
     if (divisor == 0) {
         throw std::runtime_error("Modulo by zero.");
     }
+
     return static_cast<int>(left->getValue()) % divisor;
 }
 
