@@ -1,5 +1,5 @@
 Team-14 C++ Arithmetic Expression Evaluator.
-README file to be updated with instructions on how to use the evaluator with examples.
+Please reference the user manual for instructions on how to use the evaluator
 TEAM INFORMATION:
 Kristoffer Comahig - Project Manager , Contact: kris.comahig@ku.edu , Computing Platform Experience: Windows and Linux , Programming Language Experience: Python (Intermediate), C++ (Beginner/Intermediate), C(Intermediate)
 Drew Franke - Project Manager , Contact: andrewfranke@ku.edu , Computing Platform Experience: Windows , Programming Language Experience: Python (Intermediate), C++, HTML5, CSS3 (Beginner)
